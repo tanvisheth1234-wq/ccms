@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCSMS - Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-page">
+    <div class="card login-box">
+      <h1>CCSMS Login</h1>
+      <p class="subtitle">Court Case Scheduling and Hearing Management System</p>
+
+      <div id="loginMessage" class="message"></div>
+
+      <form id="loginForm">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="clerk@ccsms.com" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Login</button>
+      </form>
+
+      <div class="demo-accounts">
+        <p class="muted">Demo accounts (click a row to fill in):</p>
+        <table>
+          <tr><th>Role</th><th>Email</th><th>Password</th></tr>
+          <tr data-email="clerk@ccsms.com" data-password="clerk123"><td>Court Clerk</td><td>clerk@ccsms.com</td><td>clerk123</td></tr>
+          <tr data-email="judge1@ccsms.com" data-password="judge123"><td>Judge (Sharma)</td><td>judge1@ccsms.com</td><td>judge123</td></tr>
+          <tr data-email="judge2@ccsms.com" data-password="judge123"><td>Judge (Mehta)</td><td>judge2@ccsms.com</td><td>judge123</td></tr>
+          <tr data-email="lawyer@ccsms.com" data-password="lawyer123"><td>Lawyer</td><td>lawyer@ccsms.com</td><td>lawyer123</td></tr>
+          <tr data-email="defendant@ccsms.com" data-password="defendant123"><td>Defendant</td><td>defendant@ccsms.com</td><td>defendant123</td></tr>
+          <tr data-email="witness@ccsms.com" data-password="witness123"><td>Witness</td><td>witness@ccsms.com</td><td>witness123</td></tr>
+          <tr data-email="admin@ccsms.com" data-password="admin123"><td>Administrator</td><td>admin@ccsms.com</td><td>admin123</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script>
+    // Use Case: Login  |  DFD Process 1: Authenticate User
+    document.getElementById('loginForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      try {
+        const result = await api('POST', '/api/login', { email, password });
+        // Activity Diagram Decision "Login valid?" -> [Yes]
+        sessionStorage.setItem('ccsmsToken', result.token);
+        sessionStorage.setItem('ccsmsUser', JSON.stringify(result.user));
+        window.location.href = 'dashboard.html';
+      } catch (err) {
+        // [No] -> Display login error
+        showMessage('loginMessage', err.message, 'error');
+      }
+    });
+
+    document.querySelectorAll('.demo-accounts tr[data-email]').forEach(row => {
+      row.addEventListener('click', () => {
+        document.getElementById('email').value = row.dataset.email;
+        document.getElementById('password').value = row.dataset.password;
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCSMS - Notifications</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main class="content">
+      <h1 id="pageTitle">Notifications</h1>
+      <p class="muted">Notification Service (simulated): no real e-mail or SMS is sent; each message is stored as a Notification record.</p>
+      <div id="notifMessage" class="message"></div>
+
+      <div class="card">
+        <div class="form-grid">
+          <div>
+            <label for="statusFilter">Status</label>
+            <select id="statusFilter">
+              <option value="">All</option>
+              <option>Delivered</option>
+              <option>Failed</option>
+              <option>Acknowledged</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr id="headRow"></tr></thead>
+            <tbody id="notifRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/notifications.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCSMS - Reports</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main class="content">
+      <h1>Generate Reports</h1>
+      <p class="muted">DFD Process 6: Generate Reports (Scheduled Hearings, Case Status) &rarr; Court Administrator.</p>
+      <div id="reportMessage" class="message"></div>
+
+      <div class="card">
+        <div class="actions" style="margin-top:0">
+          <button onclick="generateReport('scheduled-hearings')">Generate Scheduled Hearings Report</button>
+          <button onclick="generateReport('case-status')">Generate Case Status Report</button>
+          <button class="secondary" onclick="window.print()">Print</button>
+        </div>
+      </div>
+
+      <div id="reportCard" class="card hidden"></div>
+    </main>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script>
+    // Use Case: Generate Reports (Administrator)  ->  Report class
+    const user = initPage('reports.html');
+
+    async function generateReport(type) {
+      try {
+        const report = await api('GET', '/api/reports/' + type);
+        const card = document.getElementById('reportCard');
+        card.innerHTML = `
+          <h2>${esc(report.title)}</h2>
+          <p class="muted">Generated at ${esc(report.generatedAt)} | Total records: ${report.rows.length}</p>
+          <div class="stat-grid">${report.summary.map(s =>
+            `<div class="stat"><div class="value">${s.value}</div><div class="label">${esc(s.label)}</div></div>`).join('')}
+          </div>
+          <div class="table-wrap"><table>
+            <thead><tr>${report.columns.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead>
+            <tbody>${report.rows.length
+              ? report.rows.map(row => `<tr>${row.map((cell, i) =>
+                  `<td>${report.columns[i] === 'Status' ? badge(cell) : esc(cell)}</td>`).join('')}</tr>`).join('')
+              : `<tr><td colspan="${report.columns.length}" class="muted">No records.</td></tr>`}</tbody>
+          </table></div>`;
+        card.classList.remove('hidden');
+        showMessage('reportMessage', '', 'info');
+      } catch (err) {
+        showMessage('reportMessage', err.message, 'error');
+      }
+    }
+  </script>
+</body>
+</html>

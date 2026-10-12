@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCSMS - Schedule Hearing</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main class="content">
+      <h1>Schedule Hearing</h1>
+
+      <div class="steps">
+        <span id="step1">1. Request Hearing</span>
+        <span id="step2">2. Check Availability</span>
+        <span id="step3">3. Review &amp; Confirm</span>
+        <span id="step4">4. Scheduled &amp; Notified</span>
+      </div>
+
+      <div id="scheduleMessage" class="message"></div>
+
+      <!-- STEP 1: Select case, request hearing, enter preferred date & time -->
+      <form id="requestForm" class="card">
+        <h2>Hearing Request</h2>
+        <div class="form-grid">
+          <div>
+            <label for="caseId">Select Case *</label>
+            <select id="caseId" name="caseId"></select>
+          </div>
+          <div>
+            <label>Assigned Judge (retrieved from case)</label>
+            <input id="judgeName" disabled placeholder="Select a case first">
+          </div>
+          <div>
+            <label for="hearingDate">Preferred Date *</label>
+            <input type="date" id="hearingDate" name="hearingDate">
+          </div>
+          <div>
+            <label for="startTime">Start Time *</label>
+            <input type="time" id="startTime" name="startTime" min="09:00" max="17:00">
+          </div>
+          <div>
+            <label for="endTime">End Time *</label>
+            <input type="time" id="endTime" name="endTime" min="09:00" max="17:00">
+          </div>
+          <div>
+            <label for="courtroomId">Preferred Courtroom *</label>
+            <select id="courtroomId" name="courtroomId"></select>
+          </div>
+          <div class="full">
+            <label for="purpose">Purpose *</label>
+            <input id="purpose" name="purpose" placeholder="e.g. Evidence hearing">
+          </div>
+        </div>
+        <p class="muted">Court hours: 09:00 - 17:00. Court holidays are blocked.</p>
+        <div class="actions">
+          <button type="submit">Check Availability</button>
+        </div>
+      </form>
+
+      <!-- STEP 2: Availability result (available slot OR conflict + alternatives) -->
+      <div id="availabilitySection" class="card hidden"></div>
+
+      <!-- STEP 3: Display selected hearing details, review, confirm? -->
+      <div id="reviewSection" class="card hidden"></div>
+
+      <!-- STEP 4: Success + notification status -->
+      <div id="resultSection" class="card hidden"></div>
+    </main>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/schedule.js"></script>
+</body>
+</html>

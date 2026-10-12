@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCSMS - Requests</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main class="content">
+      <h1 id="pageTitle">Requests</h1>
+      <div id="requestMessage" class="message"></div>
+
+      <!-- Judge: Request Hearing Cancellation / Lawyer: Submit Adjournment Request -->
+      <form id="requestForm" class="card hidden">
+        <h2 id="formTitle"></h2>
+        <div class="form-grid">
+          <div><label for="hearingId">Hearing *</label><select id="hearingId" name="hearingId"></select></div>
+          <div class="full"><label for="reason">Reason *</label><textarea id="reason" name="reason"></textarea></div>
+        </div>
+        <p class="muted" id="formNote"></p>
+        <div class="actions"><button type="submit" id="submitButton">Submit Request</button></div>
+      </form>
+
+      <!-- Adjournment Requests (Court Clerk reviews, Lawyer sees own) -->
+      <div id="adjournmentCard" class="card hidden">
+        <h2>Adjournment Requests</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Hearing</th><th>Case</th><th>Hearing Date</th><th>Lawyer</th>
+                       <th>Reason</th><th>Request Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="adjournmentRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Judge Cancellation Requests (Court Clerk reviews, Judge sees own) -->
+      <div id="cancellationCard" class="card hidden">
+        <h2>Hearing Cancellation Requests (from Judges)</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Hearing</th><th>Case</th><th>Hearing Date</th><th>Judge</th>
+                       <th>Reason</th><th>Request Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="cancellationRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/requests.js"></script>
+</body>
+</html>

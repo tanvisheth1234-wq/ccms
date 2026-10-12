@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCSMS - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main class="content">
+      <div class="card">
+        <h1 id="welcome"></h1>
+        <p id="roleLine"></p>
+      </div>
+      <div id="dashMessage" class="message"></div>
+      <div class="stat-grid" id="stats"></div>
+      <div class="card">
+        <h2>Your Use Cases</h2>
+        <p class="muted">Actions available to your role, as shown in the Use Case Diagram.</p>
+        <ul id="useCases"></ul>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script>
+    // Use cases of each actor (from the Use Case Diagram)
+    const USE_CASES = {
+      CourtClerk: ['Register New Case (and Assign Judge)', 'Update Case Details', 'Search Case', 'Close Case',
+                   'Schedule Hearing', 'Reschedule Hearing', 'Cancel Hearing', 'View Hearing Schedule',
+                   'Review Adjournment / Cancellation Requests'],
+      Judge: ['View Assigned Cases', 'View Hearing Schedule', 'Record Hearing Outcome', 'Request Hearing Cancellation'],
+      Lawyer: ['View Hearing Schedule', 'Submit Adjournment Request', 'Receive / Acknowledge Notifications'],
+      Defendant: ['View Hearing Schedule', 'Receive / Acknowledge Notifications'],
+      Witness: ['Receive / Acknowledge Notifications'],
+      Administrator: ['Manage Users & Roles', 'Reassign Judge', 'Maintain Holiday Calendar',
+                      'Retrigger Failed Notifications', 'Generate Reports']
+    };
+
+    const user = initPage('dashboard.html');
+
+    async function loadDashboard() {
+      document.getElementById('welcome').textContent = `Welcome, ${user.name}`;
+      document.getElementById('roleLine').textContent = `Role: ${ROLE_LABELS[user.role]}`;
+      document.getElementById('useCases').innerHTML =
+        USE_CASES[user.role].map(u => `<li>${esc(u)}</li>`).join('');
+      try {
+        const data = await api('GET', '/api/dashboard');
+        document.getElementById('stats').innerHTML = data.cards.map(c =>
+          `<div class="stat"><div class="value">${c.value}</div><div class="label">${esc(c.label)}</div></div>`).join('');
+      } catch (err) {
+        showMessage('dashMessage', err.message, 'error');
+      }
+    }
+
+    if (user) loadDashboard();
+  </script>
+</body>
+</html>

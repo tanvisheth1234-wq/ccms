@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCSMS - Register Case</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main class="content">
+      <h1>Register New Case</h1>
+      <div id="caseMessage" class="message"></div>
+
+      <form id="caseForm" class="card">
+        <h2>Case Details</h2>
+        <div class="form-grid">
+          <div>
+            <label>Case ID</label>
+            <input value="Generated automatically (C003, C004, ...)" disabled>
+          </div>
+          <div>
+            <label for="caseNumber">Case Number *</label>
+            <input id="caseNumber" name="caseNumber" placeholder="CC/2026/003">
+          </div>
+          <div>
+            <label for="caseType">Case Type *</label>
+            <select id="caseType" name="caseType">
+              <option value="">-- Select --</option>
+              <option>Civil</option>
+              <option>Criminal</option>
+              <option>Family</option>
+              <option>Commercial</option>
+            </select>
+          </div>
+          <div>
+            <label for="filingDate">Filing Date *</label>
+            <input type="date" id="filingDate" name="filingDate">
+          </div>
+          <div>
+            <label for="status">Status *</label>
+            <select id="status" name="status">
+              <option>Open</option>
+              <option>Pending</option>
+            </select>
+          </div>
+          <div>
+            <label for="assignedJudgeId">Assign Judge *</label>
+            <select id="assignedJudgeId" name="assignedJudgeId"></select>
+          </div>
+          <div class="full">
+            <label for="description">Description</label>
+            <textarea id="description" name="description"></textarea>
+          </div>
+        </div>
+
+        <h2 style="margin-top:20px">Parties (receive hearing notifications)</h2>
+        <div class="form-grid">
+          <div>
+            <label for="lawyerId">Lawyer / Party Representative</label>
+            <select id="lawyerId" name="lawyerId"></select>
+          </div>
+          <div>
+            <label for="defendantId">Defendant</label>
+            <select id="defendantId" name="defendantId"></select>
+          </div>
+          <div>
+            <label for="witnessId">Witness</label>
+            <select id="witnessId" name="witnessId"></select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit">Register Case</button>
+          <button type="reset" class="secondary">Clear</button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/register-case.js"></script>
+</body>
+</html>

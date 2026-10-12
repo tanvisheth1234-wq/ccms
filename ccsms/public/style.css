@@ -1,0 +1,245 @@
+/* ================================================================
+   CCSMS - simple, clean lab UI
+   ================================================================ */
+:root {
+  --primary: #1f3a5f;
+  --primary-light: #2d5286;
+  --accent: #c9a227;
+  --bg: #f3f5f8;
+  --card: #ffffff;
+  --text: #1d2433;
+  --muted: #5f6b7d;
+  --border: #d9dee6;
+  --success: #1e7b45;
+  --success-bg: #e3f4ea;
+  --error: #b42318;
+  --error-bg: #fdeceb;
+  --warning: #8a5a00;
+  --warning-bg: #fff4d6;
+  --info-bg: #e8f0fb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--bg);
+}
+
+h1, h2, h3 { margin: 0 0 12px; color: var(--primary); }
+h1 { font-size: 24px; }
+h2 { font-size: 19px; }
+h3 { font-size: 16px; }
+
+/* ---------- Header ---------- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--primary);
+  color: #fff;
+  padding: 12px 24px;
+  border-bottom: 4px solid var(--accent);
+}
+.header .brand { font-weight: 600; font-size: 18px; }
+.header .brand small { display: block; font-weight: 400; font-size: 12px; opacity: 0.8; }
+.header .user-info { font-size: 14px; text-align: right; }
+.header button { margin-left: 12px; }
+
+/* ---------- Layout ---------- */
+.layout { display: flex; min-height: calc(100vh - 64px); }
+
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: #fff;
+  border-right: 1px solid var(--border);
+  padding: 16px 0;
+}
+.sidebar a {
+  display: block;
+  padding: 10px 22px;
+  color: var(--text);
+  text-decoration: none;
+  border-left: 4px solid transparent;
+}
+.sidebar a:hover { background: var(--bg); }
+.sidebar a.active {
+  background: var(--info-bg);
+  border-left-color: var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.content { flex: 1; padding: 24px; min-width: 0; }
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.stat {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--primary);
+  border-radius: 8px;
+  padding: 16px;
+}
+.stat .value { font-size: 28px; font-weight: 700; color: var(--primary); }
+.stat .label { color: var(--muted); font-size: 13px; }
+
+/* ---------- Forms ---------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.form-grid .full { grid-column: 1 / -1; }
+
+label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; color: var(--muted); }
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px 10px;
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+}
+textarea { min-height: 70px; resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--primary-light); border-color: transparent; }
+
+.checkbox { display: flex; align-items: center; gap: 8px; font-weight: 400; color: var(--text); }
+.checkbox input { width: auto; }
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+
+/* ---------- Buttons ---------- */
+button, .btn {
+  padding: 8px 16px;
+  font: inherit;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: var(--primary);
+  color: #fff;
+}
+button:hover { background: var(--primary-light); }
+button.secondary { background: #e4e8ee; color: var(--text); }
+button.secondary:hover { background: #d4dae3; }
+button.danger { background: var(--error); }
+button.danger:hover { background: #8f1c13; }
+button.success { background: var(--success); }
+button.small { padding: 4px 10px; font-size: 13px; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.header button { background: transparent; border: 1px solid #fff; }
+
+/* ---------- Tables ---------- */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 9px 10px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+th { background: var(--bg); color: var(--muted); font-weight: 600; white-space: nowrap; }
+tr:hover td { background: #fafbfc; }
+td .actions { margin-top: 0; gap: 6px; }
+
+/* ---------- Status badges ---------- */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge.Open, .badge.Scheduled, .badge.Delivered, .badge.Approved, .badge.Available { background: var(--success-bg); color: var(--success); }
+.badge.Pending, .badge.Adjourned { background: var(--warning-bg); color: var(--warning); }
+.badge.Closed, .badge.Completed, .badge.Acknowledged { background: #e6e9ee; color: #3d4757; }
+.badge.Cancelled, .badge.Failed, .badge.Rejected, .badge.Unavailable { background: var(--error-bg); color: var(--error); }
+
+/* ---------- Messages ---------- */
+.message { padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; }
+.message:empty { display: none; }
+.message.success { background: var(--success-bg); color: var(--success); }
+.message.error { background: var(--error-bg); color: var(--error); }
+.message.info { background: var(--info-bg); color: var(--primary); }
+.message.warning { background: var(--warning-bg); color: var(--warning); }
+
+.conflict-box {
+  border: 1px solid var(--error);
+  background: var(--error-bg);
+  color: var(--error);
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+}
+.conflict-box ul { margin: 6px 0 0; padding-left: 20px; }
+
+.trace {
+  font-family: Consolas, monospace;
+  font-size: 13px;
+  background: #1d2433;
+  color: #d6e2f5;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 12px 0 0;
+  white-space: pre-wrap;
+}
+
+.details-table th { width: 180px; background: none; }
+
+/* ---------- Schedule hearing steps ---------- */
+.steps { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.steps span {
+  padding: 6px 12px;
+  border-radius: 16px;
+  background: #e4e8ee;
+  color: var(--muted);
+  font-size: 13px;
+}
+.steps span.active { background: var(--primary); color: #fff; }
+.steps span.done { background: var(--success-bg); color: var(--success); }
+
+.hidden { display: none !important; }
+.muted { color: var(--muted); font-size: 13px; }
+
+/* ---------- Login page ---------- */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--primary), #0f1f35);
+}
+.login-box { width: 100%; max-width: 420px; }
+.login-box h1 { text-align: center; }
+.login-box .subtitle { text-align: center; color: var(--muted); margin: -6px 0 20px; }
+.login-box label { margin-top: 12px; }
+.login-box button { width: 100%; margin-top: 20px; padding: 10px; }
+.demo-accounts { margin-top: 20px; font-size: 13px; }
+.demo-accounts td, .demo-accounts th { padding: 4px 6px; }
+.demo-accounts tr { cursor: pointer; }
+
+/* ---------- Small screens ---------- */
+@media (max-width: 760px) {
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; display: flex; flex-wrap: wrap; padding: 8px; border-right: none; border-bottom: 1px solid var(--border); }
+  .sidebar a { padding: 8px 12px; border-left: none; border-radius: 6px; }
+  .content { padding: 16px; }
+  .header { flex-direction: column; align-items: flex-start; gap: 6px; padding: 12px 16px; }
+  .header .user-info { text-align: left; }
+}

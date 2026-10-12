@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCSMS - Users &amp; Roles</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main class="content">
+      <h1>Manage Users &amp; Roles</h1>
+      <p class="muted">Every actor is a User. The role column implements the UML specialization
+        User &rarr; CourtClerk / Judge / Lawyer / Defendant / Witness / Administrator.</p>
+      <div id="userMessage" class="message"></div>
+
+      <form id="userForm" class="card">
+        <h2>Add User</h2>
+        <div class="form-grid">
+          <div><label>Name *</label><input name="name"></div>
+          <div><label>Email *</label><input type="email" name="email"></div>
+          <div><label>Password *</label><input name="password"></div>
+          <div><label>Role *</label><select name="role" class="roleSelect"></select></div>
+        </div>
+        <div class="actions"><button type="submit">Add User</button></div>
+      </form>
+
+      <div class="card">
+        <h2>All Users</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Actions</th></tr></thead>
+            <tbody id="userRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script>
+    // Use Case: Manage Users & Roles (Administrator)
+    const user = initPage('users.html');
+    const ROLES = Object.keys(ROLE_LABELS);
+
+    function roleOptions(selected) {
+      return ROLES.map(r => `<option value="${r}" ${r === selected ? 'selected' : ''}>${ROLE_LABELS[r]}</option>`).join('');
+    }
+
+    async function loadUsers() {
+      try {
+        const users = await api('GET', '/api/users');
+        renderRows(document.getElementById('userRows'), users, u => `
+          <tr>
+            <td>${u.userId}</td>
+            <td>${esc(u.name)}</td>
+            <td>${esc(u.email)}</td>
+            <td><select id="role-${u.userId}">${roleOptions(u.role)}</select></td>
+            <td><div class="actions">
+              <button class="small" onclick="updateRole(${u.userId})">Update Role</button>
+              <button class="small danger" onclick="deleteUser(${u.userId})">Delete</button>
+            </div></td>
+          </tr>`, 5);
+      } catch (err) {
+        showMessage('userMessage', err.message, 'error');
+      }
+    }
+
+    async function updateRole(userId) {
+      try {
+        const role = document.getElementById('role-' + userId).value;
+        const result = await api('PUT', `/api/users/${userId}/role`, { role });
+        showMessage('userMessage', result.message, 'success');
+      } catch (err) {
+        showMessage('userMessage', err.message, 'error');
+      }
+      loadUsers();
+    }
+
+    async function deleteUser(userId) {
+      if (!confirm(`Delete user #${userId}?`)) return;
+      try {
+        const result = await api('DELETE', '/api/users/' + userId);
+        showMessage('userMessage', result.message, 'success');
+        loadUsers();
+      } catch (err) {
+        showMessage('userMessage', err.message, 'error');
+      }
+    }
+
+    document.getElementById('userForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const data = readForm(event.target);
+      if (!data.name || !data.email || !data.password || !data.role) {
+        showMessage('userMessage', 'Please fill in all fields.', 'error');
+        return;
+      }
+      try {
+        const result = await api('POST', '/api/users', data);
+        showMessage('userMessage', result.message, 'success');
+        event.target.reset();
+        loadUsers();
+      } catch (err) {
+        showMessage('userMessage', err.message, 'error');
+      }
+    });
+
+    if (user) {
+      document.querySelector('.roleSelect').innerHTML = '<option value="">-- Select --</option>' + roleOptions();
+      loadUsers();
+    }
+  </script>
+</body>
+</html>

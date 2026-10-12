@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCSMS - Hearings</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main class="content">
+      <h1 id="pageTitle">Hearings</h1>
+      <div id="hearingMessage" class="message"></div>
+
+      <!-- Filters: Case / Judge / Date / Status -->
+      <form id="filterForm" class="card">
+        <div class="form-grid">
+          <div><label for="caseFilter">Case</label><select id="caseFilter" name="caseId"></select></div>
+          <div id="judgeFilterBox"><label for="judgeFilter">Judge</label><select id="judgeFilter" name="judgeId"></select></div>
+          <div><label for="dateFilter">Date</label><input type="date" id="dateFilter" name="date"></div>
+          <div><label for="statusFilter">Status</label>
+            <select id="statusFilter" name="status">
+              <option value="">All</option>
+              <option>Scheduled</option>
+              <option>Completed</option>
+              <option>Cancelled</option>
+              <option>Adjourned</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button type="submit">Apply Filters</button>
+          <button type="button" class="secondary" id="clearFilters">Clear</button>
+        </div>
+      </form>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Hearing ID</th><th>Case Number</th><th>Date</th><th>Start</th><th>End</th>
+                  <th>Judge</th><th>Courtroom</th><th>Status</th><th>Purpose</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="hearingRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Details / Reschedule / Cancel / Record Outcome panel -->
+      <div id="hearingPanel" class="card hidden"></div>
+    </main>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/hearings.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCSMS - Cases</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main class="content">
+      <h1 id="pageTitle">Cases</h1>
+      <div id="caseMessage" class="message"></div>
+
+      <!-- Use Case: Search Case -->
+      <form id="searchForm" class="card">
+        <div class="form-grid">
+          <div>
+            <label for="search">Search (Case ID / Case Number / Case Type)</label>
+            <input id="search" name="search" placeholder="e.g. C001, CC/2026/001, Civil">
+          </div>
+          <div>
+            <label for="statusFilter">Status</label>
+            <select id="statusFilter" name="status">
+              <option value="">All</option>
+              <option>Open</option>
+              <option>Pending</option>
+              <option>Closed</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button type="submit">Search</button>
+          <button type="button" class="secondary" id="showAll">Show All</button>
+        </div>
+      </form>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Case ID</th><th>Case Number</th><th>Type</th><th>Filing Date</th>
+                  <th>Assigned Judge</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="caseRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Details / Edit / Reassign panel (filled by cases.js) -->
+      <div id="casePanel" class="card hidden"></div>
+    </main>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/cases.js"></script>
+</body>
+</html>

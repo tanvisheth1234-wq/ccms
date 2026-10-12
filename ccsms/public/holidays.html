@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCSMS - Holiday Calendar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main class="content">
+      <h1>Maintain Holiday Calendar</h1>
+      <p class="muted">Hearings cannot be scheduled or rescheduled on a court holiday.</p>
+      <div id="holidayMessage" class="message"></div>
+
+      <form id="holidayForm" class="card">
+        <h2>Add Holiday</h2>
+        <div class="form-grid">
+          <div><label>Date *</label><input type="date" name="date"></div>
+          <div><label>Description *</label><input name="description" placeholder="e.g. Diwali"></div>
+        </div>
+        <div class="actions"><button type="submit">Add Holiday</button></div>
+      </form>
+
+      <div class="card">
+        <h2>Court Holidays</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Date</th><th>Description</th><th>Actions</th></tr></thead>
+            <tbody id="holidayRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script>
+    // Use Case: Maintain Holiday Calendar (Administrator)  ->  Holiday class
+    const user = initPage('holidays.html');
+
+    async function loadHolidays() {
+      try {
+        const holidays = await api('GET', '/api/holidays');
+        renderRows(document.getElementById('holidayRows'), holidays, h => `
+          <tr>
+            <td>${h.holidayId}</td>
+            <td>${esc(h.date)}</td>
+            <td>${esc(h.description)}</td>
+            <td><button class="small danger" onclick="deleteHoliday(${h.holidayId})">Delete</button></td>
+          </tr>`, 4);
+      } catch (err) {
+        showMessage('holidayMessage', err.message, 'error');
+      }
+    }
+
+    async function deleteHoliday(id) {
+      if (!confirm('Delete this holiday?')) return;
+      try {
+        const result = await api('DELETE', '/api/holidays/' + id);
+        showMessage('holidayMessage', result.message, 'success');
+        loadHolidays();
+      } catch (err) {
+        showMessage('holidayMessage', err.message, 'error');
+      }
+    }
+
+    document.getElementById('holidayForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const data = readForm(event.target);
+      if (!data.date || !data.description) {
+        showMessage('holidayMessage', 'Please enter date and description.', 'error');
+        return;
+      }
+      try {
+        const result = await api('POST', '/api/holidays', data);
+        showMessage('holidayMessage', result.message, result.message.includes('Note:') ? 'warning' : 'success');
+        event.target.reset();
+        loadHolidays();
+      } catch (err) {
+        showMessage('holidayMessage', err.message, 'error');
+      }
+    });
+
+    if (user) loadHolidays();
+  </script>
+</body>
+</html>
